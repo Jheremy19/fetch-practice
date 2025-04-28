@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Tech Insights</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: darkred;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+        }
+        nav {
+            margin-top: 0.5rem;
+        }
+        nav a {
+            color: white;
+            margin: 0 10px;
+            text-decoration: none;
+        }
+        main {
+            padding: 2rem;
+        }
+        #featured, #other-posts {
+            margin-bottom: 2rem;
+        }
+        .featured-post {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .featured-post img {
+            width: 300px;
+            height: 200px;
+            object-fit: cover;
+        }
+        .featured-post .info {
+            max-width: 600px;
+        }
+        .other-posts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem; 
+        }
+        .other-post {
+            border: 1px solid #ccc;
+            padding: 1rem;
+        }
+        .other-post img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Tech Insights</h1>
+        <nav>
+            <a href="#">Home</a>
+            <a href="#">Entertainment</a>
+            <a href="#">News</a>
+            <a href="#">Sports</a>
+            <a href="#">More</a>
+        </nav>
+    </header>
+
+    <main>
+        <section id="featured">
+            <h2>FEATURED</h2>
+            <div id="featured-post" class="featured-post"></div>
+        </section>  
+
+        <section id="other-posts">
+            <h2>OTHER POSTS</h2>
+            <div id="other-posts-grid" class="other-posts-grid"></div>
+        </section>
+    </main>
+
+    <script>
+        fetch('https://web1sem124.dcism.org/MiniBlog.php')
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+
+            const featuredPost = document.getElementById('featured-post');
+            featuredPost.innerHTML = `
+                <img src="${data.featured_post.image}" alt="Featured Image">
+                <div class="info">
+                    <h3>${data.featured_post.title}</h3>
+                    <p>${data.featured_post.content}</p>
+                    <p><strong>${data.featured_post.author} - ${data.featured_post.date}</strong></p>
+                </div>
+            `;
+
+            const otherPostsGrid = document.getElementById('other-posts-grid');
+            otherPostsGrid.innerHTML = '';
+
+            data.other_posts.forEach(post => {
+                otherPostsGrid.innerHTML += `
+                    <div class="other-post">
+                        <img src="${post.image}" alt="Post Image">
+                        <h4>${post.title}</h4>
+                        <p>${post.content}</p>
+                        <p><strong>${post.author} - ${post.date}</strong></p>
+                    </div>
+                `;
+            });
+        })
+    </script>
+</body>
+</html>
